@@ -1,0 +1,6 @@
+{
+  "name": "เหลือเก็บ - Luea Kep",
+  "description": "แอปจัดการเงินที่บอกผู้ใช้ว่า วันนี้ใช้ได้อีกเท่าไหร่ และสิ้นเดือนจะเหลือเก็บเท่าไหร่ พร้อมโหมดฟรีแลนซ์และการออมเงินอย่างมีเป้าหมาย",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,85 @@
+{
+  "entities": {
+    "userProfile": {
+      "title": "UserProfile",
+      "description": "User profile with financial preferences and gamification level",
+      "type": "object",
+      "properties": {
+        "monthlyIncome": { "type": "number", "description": "Monthly income in Thai Baht" },
+        "monthlyBudget": { "type": "number", "description": "Monthly budget in Thai Baht" },
+        "monthlySavingsTarget": { "type": "number", "description": "Monthly savings goal in Thai Baht" },
+        "isFreelancer": { "type": "boolean", "description": "Whether user is a freelancer" },
+        "taxDeductionPercent": { "type": "number", "description": "Tax percentage to reserve" },
+        "emergencyFundPercent": { "type": "number", "description": "Emergency fund percentage to reserve" },
+        "virtualSavingsPool": { "type": "number", "description": "Spare change virtual pool" },
+        "xp": { "type": "number", "description": "Gamification experience points" },
+        "level": { "type": "number", "description": "Gamification level" }
+      },
+      "required": ["monthlyBudget"]
+    },
+    "transaction": {
+      "title": "Transaction",
+      "description": "Financial income or expense transaction",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "Owner user ID" },
+        "accountId": { "type": "string", "description": "Target account ID" },
+        "categoryId": { "type": "string", "description": "Category ID" },
+        "amount": { "type": "number", "description": "Amount in Thai Baht" },
+        "kind": { "type": "string", "enum": ["expense", "income"] },
+        "note": { "type": "string", "maxLength": 200 },
+        "date": { "type": "string", "description": "ISO date string YYYY-MM-DD" },
+        "source": { "type": "string", "enum": ["manual", "synced"] },
+        "wallet": { "type": "string", "enum": ["personal", "work"] }
+      },
+      "required": ["amount", "kind", "date"]
+    },
+    "goal": {
+      "title": "Goal",
+      "description": "Savings goal entity",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "maxLength": 100 },
+        "target": { "type": "number" },
+        "saved": { "type": "number" },
+        "deadline": { "type": "string" },
+        "image": { "type": "string", "maxLength": 500 },
+        "autoSave": { "type": "boolean" },
+        "category": { "type": "string", "maxLength": 50 }
+      },
+      "required": ["name", "target", "deadline"]
+    },
+    "debt": {
+      "title": "Debt",
+      "description": "Debt entity to track and pay",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "maxLength": 100 },
+        "total": { "type": "number" },
+        "remaining": { "type": "number" },
+        "interest": { "type": "number" },
+        "dueDate": { "type": "string" },
+        "minPayment": { "type": "number" }
+      },
+      "required": ["name", "total", "remaining"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "userProfile",
+      "description": "Private user profile document"
+    },
+    "/users/{userId}/transactions/{transactionId}": {
+      "schema": "transaction",
+      "description": "User's financial transactions"
+    },
+    "/users/{userId}/goals/{goalId}": {
+      "schema": "goal",
+      "description": "User's personal savings goals"
+    },
+    "/users/{userId}/debts/{debtId}": {
+      "schema": "debt",
+      "description": "User's debts to track"
+    }
+  }
+}

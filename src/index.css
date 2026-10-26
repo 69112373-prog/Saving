@@ -1,0 +1,50 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'Chakra Petch', 'Prompt', system-ui, -apple-system, sans-serif;
+  --color-action-teal: #0F7A68;
+  --color-deep-teal: #0B4D41;
+  --color-bright-teal: #25AA94;
+  --color-mint: #8FD6C2;
+  --color-mint-tint: #D5F0E8;
+  --color-mint-wash: #EEF8F5;
+  --color-page: #F0EEEE;
+  --color-card: #FFFFFF;
+  --color-text-main: #2B2B2B;
+  --color-text-muted: #5E5E5E;
+  --color-border-line: #D9D5D5;
+  --color-careful: #B26A00;
+  --color-over-budget: #C62828;
+  --color-reward: #F2B01E;
+}
+
+body {
+  font-family: 'Chakra Petch', 'Prompt', system-ui, -apple-system, sans-serif;
+  line-height: 1.5;
+  color: #2B2B2B;
+  background-color: #E2E0DE;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+/* Custom scrollbar for mobile container */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Number animation helper */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+

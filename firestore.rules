@@ -1,0 +1,76 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Default deny catch-all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    // Validation for UserProfile
+    function isValidUserProfile(data) {
+      return data.monthlyBudget is number && data.monthlyBudget >= 0;
+    }
+
+    // Validation for Transaction
+    function isValidTransaction(data) {
+      return data.amount is number && data.amount > 0 &&
+             data.kind in ['expense', 'income'] &&
+             data.date is string && data.date.size() <= 10;
+    }
+
+    // Validation for Goal
+    function isValidGoal(data) {
+      return data.name is string && data.name.size() > 0 && data.name.size() <= 100 &&
+             data.target is number && data.target > 0 &&
+             data.deadline is string;
+    }
+
+    // Validation for Debt
+    function isValidDebt(data) {
+      return data.name is string && data.name.size() > 0 && data.name.size() <= 100 &&
+             data.total is number && data.total >= 0 &&
+             data.remaining is number && data.remaining >= 0;
+    }
+
+    // Connection testing endpoint
+    match /test/{docId} {
+      allow read: if isSignedIn();
+      allow write: if false;
+    }
+
+    // User documents and subcollections
+    match /users/{userId} {
+      allow get, update, delete: if isOwner(userId) && isValidId(userId);
+      allow create: if isOwner(userId) && isValidId(userId) && isValidUserProfile(request.resource.data);
+
+      match /transactions/{transactionId} {
+        allow get, list, delete: if isOwner(userId) && isValidId(userId);
+        allow create, update: if isOwner(userId) && isValidId(userId) && isValidTransaction(request.resource.data);
+      }
+
+      match /goals/{goalId} {
+        allow get, list, delete: if isOwner(userId) && isValidId(userId);
+        allow create, update: if isOwner(userId) && isValidId(userId) && isValidGoal(request.resource.data);
+      }
+
+      match /debts/{debtId} {
+        allow get, list, delete: if isOwner(userId) && isValidId(userId);
+        allow create, update: if isOwner(userId) && isValidId(userId) && isValidDebt(request.resource.data);
+      }
+    }
+  }
+}
